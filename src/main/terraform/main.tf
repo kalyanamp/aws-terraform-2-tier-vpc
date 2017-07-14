@@ -33,6 +33,7 @@ module "aws_docker_amb_az_a" {
   docker_image                 = "sverze/aws-terraform-2-tier-service"
   docker_published_ports       = "-p 8080:8080"
   docker_environment_variables = "-e RDS_ENV_USERNAME='${var.environment_name}admin' -e RDS_ENV_PASSWORD='${var.environment_name}password' -e RDS_ENV_DB_NAME='${var.environment_name}db' -e RDS_ENV_CLUSTER_ENDPOINT='${module.aws_aurora_cluster.cluster_endpoint}' -e RDS_ENV_CLUSTER_PORT='${module.aws_aurora_cluster.cluster_port}'"
+  depends_id                   = "${module.aws_aurora_cluster.depends_id}"
 }
 
 # Amber Zone B docker customer jersey service host
@@ -44,6 +45,7 @@ module "aws_docker_amb_az_b" {
   docker_image                 = "sverze/aws-terraform-2-tier-service"
   docker_published_ports       = "-p 8080:8080"
   docker_environment_variables = "-e RDS_ENV_USERNAME='${var.environment_name}admin' -e RDS_ENV_PASSWORD='${var.environment_name}password' -e RDS_ENV_DB_NAME='${var.environment_name}db' -e RDS_ENV_CLUSTER_ENDPOINT='${module.aws_aurora_cluster.cluster_endpoint}' -e RDS_ENV_CLUSTER_PORT='${module.aws_aurora_cluster.cluster_port}'"
+  depends_id                   = "${module.aws_aurora_cluster.depends_id}"
 }
 
 # ELB serving Amber Zone A/B docker customer jersey service host

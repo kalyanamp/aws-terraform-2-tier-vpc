@@ -1,4 +1,4 @@
-resource "aws_rds_cluster" "aurora_cluster" {
+resource "aws_rds_cluster" "aurora_rds_cluster" {
     cluster_identifier            = "${var.environment_name}-aurora-cluster"
     database_name                 = "${var.rds_database_name}"
     master_username               = "${var.rds_master_username}"
@@ -7,7 +7,7 @@ resource "aws_rds_cluster" "aurora_cluster" {
     preferred_backup_window       = "02:00-03:00"
     preferred_maintenance_window  = "wed:03:00-wed:04:00"
     db_subnet_group_name          = "${aws_db_subnet_group.aurora_subnet_group.name}"
-    final_snapshot_identifier     = "${var.environment_name}-aurora-cluster"
+    skip_final_snapshot           = true
     vpc_security_group_ids        = ["${var.vpc_rds_security_group_id}"]
 
     tags {
@@ -26,7 +26,7 @@ resource "aws_rds_cluster_instance" "aurora_cluster_instance" {
     count                 = "${var.rds_cluster_instance_count}"
 
     identifier            = "${var.environment_name}-aurora-instance-${count.index}"
-    cluster_identifier    = "${aws_rds_cluster.aurora_cluster.id}"
+    cluster_identifier    = "${aws_rds_cluster.aurora_rds_cluster.id}"
     instance_class        = "db.t2.small"
     db_subnet_group_name  = "${aws_db_subnet_group.aurora_subnet_group.name}"
     publicly_accessible   = false
@@ -53,5 +53,8 @@ resource "aws_db_subnet_group" "aurora_subnet_group" {
         ManagedBy    = "terraform"
         Environment  = "${var.environment_name}"
     }
+}
 
+resource "null_resource" "dummy_dependency" {
+    depends_on = ["aws_rds_cluster_instance.aurora_cluster_instance"]
 }

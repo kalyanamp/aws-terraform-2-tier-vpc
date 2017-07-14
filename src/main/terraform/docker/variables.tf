@@ -38,3 +38,8 @@ variable "docker_environment_variables" {
   description = "A list of docker environment variable in the form '-e var1=foo -e var2=bar'"
   default     = ""
 }
+
+variable "depends_id" {
+  description = "Use in case there is a module dependency you rely on before this instance starts"
+  default     = ""
+}

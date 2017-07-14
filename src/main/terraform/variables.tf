@@ -9,6 +9,7 @@ variable "aws_region" {
   default     = "eu-west-2"
 }
 
+# NOTE: The key should be available via your SSH agent, use ssh-add to add this key
 variable "aws_key_name" {
   description = "AWS key name to use, it must exist in the specified region"
 }
