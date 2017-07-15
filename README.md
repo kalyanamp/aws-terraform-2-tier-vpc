@@ -1,12 +1,48 @@
 # AWS / Terraform Secure 2 Tier Infrastructure and Services
 
+This project aims to build a secure network hosting resilient micro services and a database cluster all in [AWS](https://aws.amazon.com/).
+The provisioing of all the infrastructure and services is done using [Terraform](https://www.terraform.io/).
+The micro services are [Spring Boot](https://projects.spring.io/spring-boot/) java containers offering a simple RESTfull CRuD service.
+The data base cluster is an [RDS Aurora](https://aws.amazon.com/rds/aurora) cluster.
+
+The following diagram depicts what you can build if you follow the subsequent instructions.
+
+![Resilent VPC](aws-terraform-2-tier-vpc.png)
+
 ## Set-Up
+
+You will need the following tools and accounts to make it happen
+
+### AWS Account
+
+You will need an AWS account, just [Sign-Up](https://aws.amazon.com/free)
+
+### SSH Key
+
+You will need to set-up your desired AWS region with a secure key pair. 
+This project is using London (eu-west-2) as the region I suggest you keep this the same as there are AMI's referenced that are region sensitive.
+
+[EC2 Key Pairs](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) has instructions on how to set-up your key pair.
+
+Once you have set-up key pair you will have access to the PEM file that needs to be stored safely. 
+Terraform assumes that the PEM is available in your local key chain, you can add it it to your key-chain by running the following command
 
 ```commandline
 ssh-add -K your-key.pem
 ```
 
-## Terraform
+### Terraform
+
+Install terraform command line tool. Depends on your OS, [Install Terraform](https://www.terraform.io/intro/getting-started/install.html) has some descent instructions.
+
+If you are using OSX I suggest you use [Homebrew](https://brew.sh/) to install the terraform package.
+
+### Anything Else
+
+If you intend to play around with the micro-service you will need a few other tools as well. 
+There will be further instructions on setting up the micro service a little latter.
+
+## Building / Running
 
 ### First Time
 
@@ -43,7 +79,7 @@ terraform taint -module=aws_docker_amb_az_b aws_instance.docker
 terraform apply
 ```
 
-## Docker Build
+## Microservice
 
 ```commandline
 mvn clean package docker:build
